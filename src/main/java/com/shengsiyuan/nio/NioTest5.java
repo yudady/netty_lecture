@@ -1,7 +1,6 @@
 package com.shengsiyuan.nio;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 /** ByteBuffer类型化的put与get方法 */
 public class NioTest5 {
@@ -9,12 +8,12 @@ public class NioTest5 {
     public static void main(String[] args) {
         ByteBuffer buffer = ByteBuffer.allocate(64);
 
-        buffer.putInt(15); // 4
-        buffer.putLong(500000000L); // 8
-        buffer.putDouble(14.123456); // 8
-        buffer.putChar('你'); // 2
-        buffer.putShort((short) 2); // 2
-        buffer.putChar('我'); // 2
+        buffer.putInt(15); // 4 byte
+        buffer.putLong(500000000L); // 8 byte
+        buffer.putDouble(14.123456); // 8 byte
+        buffer.putChar('你'); // 2 byte
+        buffer.putShort((short) 2); // 2 byte
+        buffer.putChar('我'); // 2 byte
 
         buffer.flip();
 
