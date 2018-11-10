@@ -1,30 +1,44 @@
 package com.shengsiyuan.nio;
 
-
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
-/**
- * ByteBuffer类型化的put与get方法
- */
+/** ByteBuffer类型化的put与get方法 */
 public class NioTest5 {
 
     public static void main(String[] args) {
         ByteBuffer buffer = ByteBuffer.allocate(64);
 
-        buffer.putInt(15);
-        buffer.putLong(500000000L);
-        buffer.putDouble(14.123456);
-        buffer.putChar('你');
-        buffer.putShort((short)2);
-        buffer.putChar('我');
+        buffer.putInt(15); // 4
+        buffer.putLong(500000000L); // 8
+        buffer.putDouble(14.123456); // 8
+        buffer.putChar('你'); // 2
+        buffer.putShort((short) 2); // 2
+        buffer.putChar('我'); // 2
 
         buffer.flip();
 
-        System.out.println(buffer.getInt());
-        System.out.println(buffer.getLong());
+        byte[] bb = new byte[4];
+        for (int i = 0; i < 4; i++) {
+            bb[i] = buffer.get();
+        }
+
+        System.out.println(byteArrayToInt(bb)); // buffer.getInt()
+        System.out.println(buffer.getLong()); // 呼叫2次 buffer.getInt()
+
         System.out.println(buffer.getDouble());
+
         System.out.println(buffer.getChar());
         System.out.println(buffer.getShort());
         System.out.println(buffer.getChar());
+
+        System.out.println("---------");
+        System.out.println(buffer.array().length);
+        System.out.println(buffer.position());
+        System.out.println(buffer.limit());
+    }
+
+    public static int byteArrayToInt(byte[] b) {
+        return ByteBuffer.wrap(b).getInt();
     }
 }
