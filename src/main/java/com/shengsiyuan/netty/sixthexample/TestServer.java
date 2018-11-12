@@ -9,6 +9,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
+
+/**
+ * ProtobufVarint32FrameDecoder
+ */
 public class TestServer {
 
     public static void main(String[] args) throws Exception {

@@ -9,6 +9,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
+
+/**
+ * 基於TCP，連接
+ */
 public class MyServer {
 
     public static void main(String[] args) throws Exception {

@@ -11,6 +11,14 @@ import io.netty.handler.logging.LoggingHandler;
 
 import java.net.InetSocketAddress;
 
+/**
+ * 完整的WebSocket
+ * HttpObjectAggregator
+ * WebSocketServerProtocolHandler
+ *
+ * client-主動發出ping
+ * server-回應pong
+ */
 public class MyServer {
 
     public static void main(String[] args) throws Exception {

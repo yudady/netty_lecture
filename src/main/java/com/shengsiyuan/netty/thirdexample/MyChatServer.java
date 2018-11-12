@@ -1,12 +1,16 @@
 package com.shengsiyuan.netty.thirdexample;
 
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+/*
+ * 基於TCP
+ * 聊天程序(一對多)
+ * 服務器端需要保存client對象
+ */
 public class MyChatServer {
 
     public static void main(String[] args) throws Exception {
@@ -15,8 +19,10 @@ public class MyChatServer {
 
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-            serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).
-                    childHandler(new MyChatServerInitializer());
+            serverBootstrap
+                    .group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .childHandler(new MyChatServerInitializer());
 
             ChannelFuture channelFuture = serverBootstrap.bind(8899).sync();
             channelFuture.channel().closeFuture().sync();

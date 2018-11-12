@@ -1,6 +1,5 @@
 package com.shengsiyuan.netty.firstexample;
 
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,10 +11,9 @@ import java.net.URI;
 
 public class TestHttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
 
-    public TestHttpServerHandler(){
+    public TestHttpServerHandler() {
         System.out.println("TestHttpServerHandler constructor");
     }
-
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
@@ -26,19 +24,20 @@ public class TestHttpServerHandler extends SimpleChannelInboundHandler<HttpObjec
         Thread.sleep(8000);
 
         if (msg instanceof HttpRequest) {
-            HttpRequest httpRequest = (HttpRequest)msg;
+            HttpRequest httpRequest = (HttpRequest) msg;
 
             System.out.println("请求方法名：" + httpRequest.method().name());
 
             URI uri = new URI(httpRequest.uri());
-            if("/favicon.ico".equals(uri.getPath())) {
+            if ("/favicon.ico".equals(uri.getPath())) {
                 System.out.println("请求favicon.ico");
                 return;
             }
 
             ByteBuf content = Unpooled.copiedBuffer("Hello World", CharsetUtil.UTF_8);
-            FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
-                    HttpResponseStatus.OK, content);
+            FullHttpResponse response =
+                    new DefaultFullHttpResponse(
+                            HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
             response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");
             response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
 

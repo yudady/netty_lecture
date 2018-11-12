@@ -1,10 +1,13 @@
 package com.shengsiyuan.netty.firstexample;
 
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpServerCodec;
+
+import java.util.Map;
 
 
 public class TestServerInitializer extends ChannelInitializer<SocketChannel>{
@@ -15,5 +18,6 @@ public class TestServerInitializer extends ChannelInitializer<SocketChannel>{
 
         pipeline.addLast("httpServerCodec", new HttpServerCodec());
         pipeline.addLast("testHttpServerHandler", new TestHttpServerHandler());
+
     }
 }

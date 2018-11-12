@@ -1,16 +1,18 @@
 package com.shengsiyuan.netty.fourthexample;
 
-
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
 
+/*
+ * 使用者事件
+ */
 public class MyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if(evt instanceof IdleStateEvent) {
-            IdleStateEvent event = (IdleStateEvent)evt;
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent event = (IdleStateEvent) evt;
 
             String eventType = null;
 

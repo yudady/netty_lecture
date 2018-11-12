@@ -7,6 +7,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+
+/**
+ * 基於HTTP
+ */
 public class TestServer {
 
     public static void main(String[] args) throws Exception {

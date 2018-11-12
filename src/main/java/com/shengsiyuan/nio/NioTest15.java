@@ -10,10 +10,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 
-public class NioTest13 {
+public class NioTest15 {
 
     public static void main(String[] args) throws Exception{
-        String inputFile = "NioTest13_In.txt";
+        String inputFile = "NioTest13-2_In.txt";
         String outputFile = "NioTest13_Out.txt";
 
         RandomAccessFile inputRandomAccessFile = new RandomAccessFile(inputFile, "r");
@@ -34,10 +34,10 @@ public class NioTest13 {
 
         System.out.println("=============");
 
-//        Charset charset = Charset.forName("utf-8");
         Charset charset = Charset.forName("iso-8859-1");
+        Charset charset2 = Charset.forName("utf-8");
         CharsetDecoder decoder = charset.newDecoder();
-        CharsetEncoder encoder = charset.newEncoder();
+        CharsetEncoder encoder = charset2.newEncoder();
 
         CharBuffer charBuffer = decoder.decode(inputData);
 
