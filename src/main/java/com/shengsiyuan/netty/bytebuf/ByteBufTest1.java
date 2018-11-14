@@ -2,16 +2,20 @@ package com.shengsiyuan.netty.bytebuf;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import org.apache.commons.codec.binary.Hex;
 
 import java.nio.charset.Charset;
 
 public class ByteBufTest1 {
 
     public static void main(String[] args) {
+
         ByteBuf byteBuf = Unpooled.copiedBuffer("张hello world", Charset.forName("utf-8"));
+//        ByteBuf byteBuf = Unpooled.copiedBuffer(Integer.toString(1), Charset.forName("utf-8"));
 
         if (byteBuf.hasArray()) {
             byte[] content = byteBuf.array();
+            System.out.println(Hex.encodeHex(content));
             System.out.println(new String(content, Charset.forName("utf-8")));
 
             System.out.println(byteBuf);

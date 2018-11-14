@@ -8,9 +8,11 @@ import io.netty.channel.socket.SocketChannel;
 
 public class MyServerInitializer extends ChannelInitializer<SocketChannel> {
 
+    private int count;
+
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
-        System.out.println(this);
+        System.out.println(this + ", count =" + (++this.count));
 
         ChannelPipeline pipeline = ch.pipeline();
 
