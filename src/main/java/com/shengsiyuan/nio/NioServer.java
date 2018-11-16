@@ -8,37 +8,72 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class NioServer {
 
     private static Map<String, SocketChannel> clientMap = new HashMap();
 
     public static void main(String[] args) throws IOException {
-        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        int jdkVersion = 8;
+        boolean isNetty = true;
+        SelectorProvider provider = SelectorProvider.provider();
+        ServerSocketChannel serverSocketChannel;
+        Selector selector;
+        if (isNetty) {
+            serverSocketChannel = provider.openServerSocketChannel();
+        } else {
+            serverSocketChannel = ServerSocketChannel.open();
+        }
+
         serverSocketChannel.configureBlocking(false);
-        ServerSocket serverSocket = serverSocketChannel.socket();
-        serverSocket.bind(new InetSocketAddress(8899));
 
-        Selector selector = Selector.open();
-        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+        if (isNetty) {
+            selector = provider.openSelector();
+        } else {
+            selector = Selector.open();
+        }
 
+        serverSocketChannel.register(selector, 0, serverSocketChannel);
+
+        if (jdkVersion >= 7) {
+            serverSocketChannel.bind(new InetSocketAddress(8899));
+        } else {
+            ServerSocket serverSocket = serverSocketChannel.socket();
+            serverSocket.bind(new InetSocketAddress(8899));
+        }
+
+
+        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT, serverSocketChannel);
+
+        System.out.println("serverSocketChannel.register#OP_ACCEPT");
         while (true) {
             try {
-                selector.select();
+                int select = selector.select();
 
+                if (select <= 0) {
+                    TimeUnit.SECONDS.sleep(1);
+                    return;
+                }
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
 
                 selectionKeys.forEach(selectionKey -> {
                     final SocketChannel client;
-
+                    ServerSocketChannel server;
                     try {
                         if (selectionKey.isAcceptable()) {
-                            ServerSocketChannel server = (ServerSocketChannel) selectionKey.channel();
+                            if (jdkVersion >= 7) {
+                                server = (ServerSocketChannel) selectionKey.attachment();
+                            } else {
+                                server = (ServerSocketChannel) selectionKey.channel();
+                            }
+
                             client = server.accept();
                             client.configureBlocking(false);
                             client.register(selector, SelectionKey.OP_READ);
@@ -46,6 +81,7 @@ public class NioServer {
                             String key = "【" + UUID.randomUUID().toString() + "】";
 
                             clientMap.put(key, client);
+
                         } else if (selectionKey.isReadable()) {
                             client = (SocketChannel) selectionKey.channel();
                             ByteBuffer readBuffer = ByteBuffer.allocate(1024);
@@ -80,13 +116,17 @@ public class NioServer {
                                     value.write(writeBuffer);
                                 }
                             }
+                        } else {
+                            System.out.println("-------> interestOps : " + selectionKey.interestOps());
                         }
+
+                        selectionKeys.remove(selectionKey);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 });
 
-                selectionKeys.clear();
+//                selectionKeys.clear();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
